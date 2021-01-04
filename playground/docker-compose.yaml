@@ -1,0 +1,28 @@
+version: "3.3"
+
+services:
+  application-1:
+    build: .
+    ports:
+      - "3000:80"
+    restart: always
+    container_name: application-1
+    volumes:
+      - "./app-1/html:/usr/share/nginx/html/"
+  application-2:
+    build: .
+    ports:
+      - "3001:80"
+    restart: always
+    container_name: application-2
+    volumes:
+      - "./app-2/html:/usr/share/nginx/html"
+  proxy-1:
+    build: .
+    ports:
+      - "80:80"
+    restart: always
+    container_name: proxy-1
+    volumes:
+      - "./proxy/html:/usr/share/nginx/html"
+      - "./proxy/conf:/etc/nginx"
