@@ -7,7 +7,7 @@ services:
       - "80:80"
       - "443:443"
     # environment:
-    #   - MAIN_ADDRESS="pat-cdn.vodafone.co.uk:443"
-    #   - ALTERNATIVE_ADDRESS="voxi.co.uk:443"
+    #   - MAIN_ADDRESS="localhost"
+    #   - ALTERNATIVE_ADDRESS="example.com:443"
     #   - CACHE_SIZE=3G
     #   - LOCAL=true
