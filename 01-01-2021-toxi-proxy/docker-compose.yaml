@@ -1,0 +1,30 @@
+version: "3.9"
+services:
+  web:
+    build: ./toxic-ui
+    volumes:
+      - ./toxic-ui:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+
+  api:
+    build: ./api-server
+    volumes:
+      - ./api-server/src:/app
+    ports:
+      - "8000:8000"
+
+  toxiproxy:
+    build: ./toxiproxy-sidecar
+    ports:
+      - "8474:8474"
+      - "8001:8000"
+
+  reverse:
+    build: ./reverse-proxy
+    ports:
+      - 80:80
+    volumes:
+      - ./reverse-proxy/html:/usr/share/nginx/html
+      - ./reverse-proxy/conf:/etc/nginx

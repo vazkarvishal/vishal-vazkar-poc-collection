@@ -1,0 +1,86 @@
+.recipe-button{
+  display:inline-block;
+  padding:0.7em 1.7em;
+  margin:0 0.3em 0.3em 0;
+  border-radius:0.2em;
+  box-sizing: border-box;
+  text-decoration:none;
+  font-family:'Roboto',sans-serif;
+  font-weight:400;
+  font-size: x-large;
+  color:#FFFFFF;
+  background-color:#3369ff;
+  box-shadow:inset 0 -0.6em 1em -0.35em rgba(0,0,0,0.17),inset 0 0.6em 2em -0.3em rgba(255,255,255,0.15),inset 0 0 0em 0.05em rgba(255,255,255,0.12);
+  text-align:center;
+  position:relative;
+  cursor: pointer;
+}
+.recipe-button:active{
+  box-shadow:inset 0 0.6em 2em -0.3em rgba(0,0,0,0.15),inset 0 0 0em 0.05em rgba(255,255,255,0.12);
+}
+@media all and (max-width:30em){
+ .recipe-button{
+    display:block;
+    margin:0.4em auto;
+  }
+}
+
+.recipeModal {
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #bfbdba;
+}
+.recipeModal span {
+  display: block;
+}
+.allRecipes {
+  margin: 0px auto;
+  width: 512px;
+}
+
+.holdingBox {
+  background-color:#0a7ba1;
+  color: white;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+@keyframes rotate {
+  from {
+      transform: rotate(0deg);
+  }
+  to { 
+      transform: rotate(360deg);
+  }
+}
+
+
+@-webkit-keyframes rotate {
+  from {
+      -webkit-transform: rotate(0deg);
+  }
+  to { 
+      -webkit-transform: rotate(360deg);
+  }
+}
+
+.load {
+  width: 100px;
+  height: 100px;
+  margin: 110px auto 0;
+  border:solid 10px #8822aa;
+  border-radius: 50%;
+  border-right-color: transparent;
+  border-bottom-color: transparent;
+  -webkit-transition: all 0.5s ease-in;
+  -webkit-animation-name:             rotate; 
+  -webkit-animation-duration:         1.0s; 
+  -webkit-animation-iteration-count:  infinite;
+  -webkit-animation-timing-function: linear;
+    
+  transition: all 0.5s ease-in;
+  animation-name:             rotate; 
+  animation-duration:         1.0s; 
+  animation-iteration-count:  infinite;
+  animation-timing-function: linear; 
+}

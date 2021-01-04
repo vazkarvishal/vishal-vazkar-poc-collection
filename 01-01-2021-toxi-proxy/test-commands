@@ -1,0 +1,5 @@
+./toxiproxy-cli delete httpproxy
+./toxiproxy-cli create httpproxy -listen 0.0.0.0:8000 --upstream api:8000
+./toxiproxy-cli toxic add httpproxy -type latency --attribute latency=5000
+./toxiproxy-cli list
+curl -w 'Total: %{time_total}s\n' http://localhost:20001
