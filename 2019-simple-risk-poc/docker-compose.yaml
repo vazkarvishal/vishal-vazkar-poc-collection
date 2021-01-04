@@ -1,0 +1,13 @@
+version: "3.3"
+
+services:
+  simplerisk:
+    build: .
+    ports:
+      - "80:80"
+      - "443:443"
+    # environment:
+    #   - MAIN_ADDRESS="pat-cdn.vodafone.co.uk:443"
+    #   - ALTERNATIVE_ADDRESS="voxi.co.uk:443"
+    #   - CACHE_SIZE=3G
+    #   - LOCAL=true
