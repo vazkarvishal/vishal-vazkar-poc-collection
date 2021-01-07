@@ -1,0 +1,278 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description: PoC of request based scaling
+
+Parameters:
+  Name:
+    Type: String
+    Default: "rbs-poc"
+  Environment:
+    Type: String
+    Default: dev
+
+  CapacityProvider:
+    Description: Decide whether to use Spot or regular instances
+    Type: String
+    AllowedValues:
+      - "FARGATE"
+      - "FARGATE_SPOT"
+    Default: "FARGATE_SPOT"
+
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+    Default: "vpc-6dec2004"
+
+  SubnetIds:
+    Type: List<AWS::EC2::Subnet::Id>
+
+Conditions:
+  SpotMode: !Equals [!Ref CapacityProvider, "FARGATE_SPOT"]
+Resources:
+  EcsCluster:
+    Type: AWS::ECS::Cluster
+    Properties:
+      ClusterName: !Sub ${Environment}-${Name}
+      CapacityProviders:
+        - FARGATE_SPOT
+      DefaultCapacityProviderStrategy:
+        - CapacityProvider: !Ref CapacityProvider
+          Weight: 1
+
+  UIAlbSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: "The security group for the UI ALB"
+      VpcId: !Ref VpcId
+      SecurityGroupIngress:
+        - Description: Allow HTTP from Bastion to the Fargate cluster
+          IpProtocol: "tcp"
+          FromPort: 80
+          ToPort: 80
+          CidrIp: "0.0.0.0/0"
+      SecurityGroupEgress:
+        - IpProtocol: "-1"
+          FromPort: -1
+          ToPort: -1
+          CidrIp: "0.0.0.0/0"
+          Description: "Allow all outbound traffic"
+
+  UIAlb:
+    Type: "AWS::ElasticLoadBalancingV2::LoadBalancer"
+    Properties:
+      Scheme: internet-facing
+      Subnets: !Ref SubnetIds
+      SecurityGroups: !Split
+        - ","
+        - !Join
+          - ","
+          - - !GetAtt UIAlbSecurityGroup.GroupId
+
+  UITargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckProtocol: HTTP
+      Protocol: HTTP
+      Port: 80
+      HealthCheckPath: "/"
+      HealthyThresholdCount: 2
+      UnhealthyThresholdCount: 2
+      HealthCheckTimeoutSeconds: 5
+      HealthCheckIntervalSeconds: 15
+      TargetType: ip
+      TargetGroupAttributes:
+        - Key: deregistration_delay.timeout_seconds
+          Value: "5"
+      Matcher:
+        HttpCode: 200-299
+      VpcId: !Ref VpcId
+
+  UIHttpListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref UITargetGroup
+      LoadBalancerArn: !Ref UIAlb
+      Port: 80
+      Protocol: HTTP
+
+  UIContainerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: "The security group for Fargate containers"
+      VpcId: !Ref VpcId
+      SecurityGroupIngress:
+        - Description: Allow HTTP from the ALB to the Fargate cluster
+          IpProtocol: "tcp"
+          FromPort: 80
+          ToPort: 80
+          SourceSecurityGroupId: !Ref UIAlbSecurityGroup
+      SecurityGroupEgress:
+        - IpProtocol: "-1"
+          FromPort: -1
+          ToPort: -1
+          CidrIp: "0.0.0.0/0"
+          Description: "Allow all outbound traffic"
+
+  CloudwatchLogsGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Join ["-", [!Ref Environment, !Ref "Name"]]
+      RetentionInDays: 14
+
+  UITaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Cpu: "256"
+      Memory: "512"
+      Family: !Sub "${Environment}-${Name}"
+      TaskRoleArn: !Ref "EcsTaskRole"
+      ExecutionRoleArn: !GetAtt EcsExecutionIamRole.Arn
+      NetworkMode: "awsvpc"
+      RequiresCompatibilities:
+        - "FARGATE"
+      ContainerDefinitions:
+        - Name: !Ref "AWS::StackName"
+          Ulimits:
+            - Name: "nofile"
+              SoftLimit: 16384
+              HardLimit: 16384
+          PortMappings:
+            - ContainerPort: 80
+          Image: !Sub "${AWS::AccountId}.dkr.ecr.eu-west-2.amazonaws.com/request-based-scaling-poc"
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: !Ref "CloudwatchLogsGroup"
+              awslogs-region: !Ref "AWS::Region"
+              awslogs-stream-prefix: ecs-demo-app
+  EcsTaskRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ecs-tasks.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: /
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
+
+  EcsExecutionIamRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "ecs-tasks.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      Path: "/"
+      Policies:
+        - PolicyName: "rbs-poc-execution-iam-role"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - ecr:GetAuthorizationToken
+                  - ecr:BatchCheckLayerAvailability
+                  - ecr:GetDownloadUrlForLayer
+                  - ecr:BatchGetImage
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                  - cloudwatch:putMetricAlarm
+                  - cloudwatch:putMetricData
+                Resource: "*"
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
+  UIEcsService:
+    Type: AWS::ECS::Service
+    DependsOn:
+      - UIHttpListener
+    Properties:
+      Cluster: !Ref EcsCluster
+      DeploymentConfiguration:
+        MaximumPercent: 200
+        MinimumHealthyPercent: 50
+      DesiredCount: 1
+      LaunchType: !If [SpotMode, !Ref "AWS::NoValue", "FARGATE"]
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp: ENABLED
+          SecurityGroups:
+            - !Ref UIContainerSecurityGroup
+          Subnets: !Ref SubnetIds
+      LoadBalancers:
+        - ContainerName: !Ref AWS::StackName
+          ContainerPort: 80
+          TargetGroupArn: !Ref UITargetGroup
+      TaskDefinition: !Ref "UITaskDefinition"
+      CapacityProviderStrategy:
+        - CapacityProvider: !Ref CapacityProvider
+          Weight: 1
+  AutoscalingRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: [application-autoscaling.amazonaws.com]
+            Action: ["sts:AssumeRole"]
+      Path: /
+      Policies:
+        - PolicyName: service-autoscaling
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action:
+                  [
+                    "application-autoscaling:*",
+                    "cloudwatch:DescribeAlarms",
+                    "cloudwatch:PutMetricAlarm",
+                    "ecs:DescribeServices",
+                    "ecs:UpdateService",
+                  ]
+                Resource: "*"
+  UIScalableTarget:
+    Type: AWS::ApplicationAutoScaling::ScalableTarget
+    Properties:
+      MaxCapacity: 10
+      MinCapacity: 1
+      ResourceId: !Sub "service/${EcsCluster}/${UIEcsService.Name}"
+      RoleARN: !GetAtt [AutoscalingRole, Arn]
+      ScalableDimension: ecs:service:DesiredCount
+      ServiceNamespace: ecs
+
+  #TargetTracking Scaling Example
+  UIScalingPolicy:
+    Type: AWS::ApplicationAutoScaling::ScalingPolicy
+    Properties:
+      PolicyName: !Sub "${AWS::StackName}-scale-up"
+      ScalingTargetId: !Ref UIScalableTarget
+      # Target Tracking starts below
+      PolicyType: TargetTrackingScaling
+      TargetTrackingScalingPolicyConfiguration:
+        # Number of requests per target
+        TargetValue: 20
+        ScaleInCooldown: 60
+        ScaleOutCooldown: 30
+        PredefinedMetricSpecification:
+          # Full definition here: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-applicationautoscaling-scalingpolicy-predefinedmetricspecification.html
+          PredefinedMetricType: ALBRequestCountPerTarget
+          ResourceLabel:
+            !Join [
+              "/",
+              [
+                !GetAtt UIAlb.LoadBalancerFullName,
+                !GetAtt UITargetGroup.TargetGroupFullName,
+              ],
+            ]

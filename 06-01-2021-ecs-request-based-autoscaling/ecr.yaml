@@ -1,0 +1,14 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description: PoC of request based scaling
+
+Parameters:
+  repositoryName:
+    Type: String
+    Default: "request-based-scaling-poc"
+
+Resources:
+  MyRepository:
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: !Ref repositoryName
