@@ -139,7 +139,7 @@ Resources:
               HardLimit: 16384
           PortMappings:
             - ContainerPort: 80
-          Image: !Sub "${AWS::AccountId}.dkr.ecr.eu-west-2.amazonaws.com/request-based-scaling-poc"
+          Image: httpd
           LogConfiguration:
             LogDriver: awslogs
             Options:
