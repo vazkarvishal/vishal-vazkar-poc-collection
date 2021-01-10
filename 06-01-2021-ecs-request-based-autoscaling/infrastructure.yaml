@@ -262,7 +262,7 @@ Resources:
       PolicyType: TargetTrackingScaling
       TargetTrackingScalingPolicyConfiguration:
         # Number of requests per target
-        TargetValue: 20
+        TargetValue: 1000
         ScaleInCooldown: 60
         ScaleOutCooldown: 30
         PredefinedMetricSpecification:
