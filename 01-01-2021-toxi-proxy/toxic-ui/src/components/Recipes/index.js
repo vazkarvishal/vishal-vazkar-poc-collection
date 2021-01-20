@@ -13,7 +13,7 @@ class Recipes extends React.Component {
   buttonHandler = (e) => {
 
     e.preventDefault()
-    console.log("entering the click state")  
+    console.log("entering the click state")
     this.setState({
       loading: true,
       error: false
@@ -21,14 +21,14 @@ class Recipes extends React.Component {
 
     const instance = axios.create({
       baseURL: "http://localhost/toxic-api",
-      headers: { 
+      headers: {
         'Access-Control-Allow-Origin': "*",
         'Content-Type': "application/json"
       },
-      timeout: 2000
+      timeout: 1000
     })
 
-    instance.get('/recipes', {headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
+    instance.get('/recipes', { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } })
       .then((response) => {
         this.setState({
           recipes: response.data,
@@ -42,11 +42,11 @@ class Recipes extends React.Component {
           error: true,
           loading: false
         })
-      }) 
+      })
   }
 
   createRecipeBox = () => {
-    return this.state.recipes.map( (recipe) => {
+    return this.state.recipes.map((recipe) => {
       return (
         <div className="recipeModal">
           <span>Name: {recipe.name}</span>
@@ -69,8 +69,8 @@ class Recipes extends React.Component {
         <button className="recipe-button" onClick={this.buttonHandler}>Get all Recipes</button>
         <div className="recipe-result-wrapper">
           <h3>All Recipes</h3>
-          { this.state.loading?<div className="load"></div>:null}
-          <div className="allRecipes">{this.state.error?this.createHoldingBox():this.createRecipeBox()}</div>
+          {this.state.loading ? <div className="load"></div> : null}
+          <div className="allRecipes">{this.state.error ? this.createHoldingBox() : this.createRecipeBox()}</div>
         </div>
       </>
     )

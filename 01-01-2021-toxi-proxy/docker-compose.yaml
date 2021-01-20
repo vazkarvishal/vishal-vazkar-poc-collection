@@ -28,3 +28,7 @@ services:
     volumes:
       - ./reverse-proxy/html:/usr/share/nginx/html
       - ./reverse-proxy/conf:/etc/nginx
+    depends_on:
+      - web
+      - toxiproxy
+      - api
