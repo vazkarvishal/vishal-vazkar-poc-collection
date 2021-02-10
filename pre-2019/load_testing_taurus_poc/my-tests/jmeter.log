@@ -1,0 +1,26 @@
+2018-06-18 15:41:40,157 INFO o.j.r.PluginManagerCMD: Command is: install-for-jmx
+2018-06-18 15:41:40,211 INFO o.j.r.JARSourceHTTP: Requesting https://jmeter-plugins.org/repo/?installID=linux-6a33878e74e1b6e0e8ec1fa899b23630-nongui
+2018-06-18 15:41:41,501 INFO o.j.r.PluginManager: Plugins Status: [jpgc-functions=2.1, jpgc-casutg=2.5, jpgc-dummy=0.2, jpgc-ffw=2.0, jpgc-fifo=0.2, jpgc-json=2.6, jpgc-prmctl=0.4, jpgc-perfmon=2.1, jpgc-plugins-manager=1.1, jpgc-tst=2.4, jmeter-core=4.0, jmeter-ftp=4.0, jmeter-http=4.0, jmeter-jdbc=4.0, jmeter-jms=4.0, jmeter-junit=4.0, jmeter-java=4.0, jmeter-ldap=4.0, jmeter-mail=4.0, jmeter-mongodb=4.0, jmeter-native=4.0, jmeter-tcp=4.0, jmeter-components=4.0]
+2018-06-18 15:41:41,504 INFO o.j.r.PluginManagerCMD: Params line is: /tmp/artifacts/modified_requests.jmx
+2018-06-18 15:41:41,832 INFO o.a.j.s.SaveService: Testplan (JMX) version: 2.2. Testlog (JTL) version: 2.2
+2018-06-18 15:41:41,843 INFO o.a.j.s.SaveService: Using SaveService properties file encoding UTF-8
+2018-06-18 15:41:41,848 INFO o.a.j.s.SaveService: Using SaveService properties version 4.0
+2018-06-18 15:41:41,892 INFO o.a.j.p.h.c.CacheManager: Will only cache the following methods: [GET]
+2018-06-18 15:41:41,896 INFO o.a.j.p.h.c.CookieManager: Settings: Delete null: true Check: true Allow variable: true Save: false Prefix: COOKIE_
+2018-06-18 15:41:41,900 WARN o.a.j.u.JMeterUtils: ERROR! Resource string not found: [option]
+2018-06-18 15:41:41,901 WARN o.a.j.u.JMeterUtils: ERROR! Resource string not found: [add]
+2018-06-18 15:41:41,901 WARN o.a.j.u.JMeterUtils: ERROR! Resource string not found: [add_host]
+2018-06-18 15:41:41,902 WARN o.a.j.u.JMeterUtils: ERROR! Resource string not found: [delete]
+2018-06-18 15:41:41,902 WARN o.a.j.u.JMeterUtils: ERROR! Resource string not found: [delete_host]
+2018-06-18 15:41:41,903 WARN o.a.j.u.JMeterUtils: ERROR! Resource string not found: [use_system_dns_resolver]
+2018-06-18 15:41:41,903 WARN o.a.j.u.JMeterUtils: ERROR! Resource string not found: [use_custom_dns_resolver]
+2018-06-18 15:41:41,904 WARN o.a.j.u.JMeterUtils: ERROR! Resource string not found: [dns_hostname_or_ip]
+2018-06-18 15:41:41,904 WARN o.a.j.u.JMeterUtils: ERROR! Resource string not found: [dns_host]
+2018-06-18 15:41:41,905 WARN o.a.j.u.JMeterUtils: ERROR! Resource string not found: [dns_hostname_or_ip]
+2018-06-18 15:41:41,963 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for text/html is org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser
+2018-06-18 15:41:41,963 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for application/xhtml+xml is org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser
+2018-06-18 15:41:41,964 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for application/xml is org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser
+2018-06-18 15:41:41,964 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for text/xml is org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser
+2018-06-18 15:41:41,965 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for text/vnd.wap.wml is org.apache.jmeter.protocol.http.parser.RegexpHTMLParser
+2018-06-18 15:41:41,965 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for text/css is org.apache.jmeter.protocol.http.parser.CssParser
+2018-06-18 15:41:42,015 INFO o.j.r.PluginManager: Finishing without changes

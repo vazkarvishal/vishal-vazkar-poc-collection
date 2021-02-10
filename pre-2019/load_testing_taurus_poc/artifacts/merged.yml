@@ -1,0 +1,11 @@
+---
+execution:
+- concurrency: 1
+  hold-for: 30s
+  ramp-up: 30s
+  scenario: quick-test
+scenarios:
+  quick-test:
+    requests:
+    - http://blazedemo.com
+

@@ -1,0 +1,64 @@
+2018-06-18 15:41:43,598 INFO o.a.j.u.JMeterUtils: Setting Locale to en_US
+2018-06-18 15:41:43,615 INFO o.a.j.JMeter: Loading user properties from: /root/.bzt/jmeter-taurus/4.0/bin/user.properties
+2018-06-18 15:41:43,616 INFO o.a.j.JMeter: Loading system properties from: /root/.bzt/jmeter-taurus/4.0/bin/system.properties
+2018-06-18 15:41:43,619 INFO o.a.j.JMeter: Setting System properties from file: /tmp/artifacts/system.properties
+2018-06-18 15:41:43,627 INFO o.a.j.JMeter: Copyright (c) 1998-2018 The Apache Software Foundation
+2018-06-18 15:41:43,628 INFO o.a.j.JMeter: Version 4.0 r1823414
+2018-06-18 15:41:43,628 INFO o.a.j.JMeter: java.version=1.8.0_171
+2018-06-18 15:41:43,628 INFO o.a.j.JMeter: java.vm.name=OpenJDK 64-Bit Server VM
+2018-06-18 15:41:43,629 INFO o.a.j.JMeter: os.name=Linux
+2018-06-18 15:41:43,629 INFO o.a.j.JMeter: os.arch=amd64
+2018-06-18 15:41:43,629 INFO o.a.j.JMeter: os.version=4.9.87-linuxkit-aufs
+2018-06-18 15:41:43,630 INFO o.a.j.JMeter: file.encoding=UTF-8
+2018-06-18 15:41:43,630 INFO o.a.j.JMeter: Max memory     =466092032
+2018-06-18 15:41:43,631 INFO o.a.j.JMeter: Available Processors =2
+2018-06-18 15:41:43,635 INFO o.a.j.JMeter: Default Locale=English (United States)
+2018-06-18 15:41:43,636 INFO o.a.j.JMeter: JMeter  Locale=English (United States)
+2018-06-18 15:41:43,637 INFO o.a.j.JMeter: JMeterHome=/root/.bzt/jmeter-taurus/4.0
+2018-06-18 15:41:43,637 INFO o.a.j.JMeter: user.dir  =/bzt-configs
+2018-06-18 15:41:43,638 INFO o.a.j.JMeter: PWD       =/bzt-configs
+2018-06-18 15:41:43,639 INFO o.a.j.JMeter: IP: 172.17.0.2 Name: 3729a5d54cbd FullName: 3729a5d54cbd
+2018-06-18 15:41:43,639 INFO o.a.j.JMeter: user.classpath=/tmp/artifacts:/tmp/artifacts
+2018-06-18 15:41:43,640 INFO o.a.j.JMeter: Adding to classpath and loader: /tmp/artifacts
+2018-06-18 15:41:43,646 INFO o.a.j.JMeter: Adding to classpath and loader: /tmp/artifacts
+2018-06-18 15:41:43,653 INFO o.a.j.s.FileServer: Default base='/bzt-configs'
+2018-06-18 15:41:43,661 INFO o.a.j.s.FileServer: Set new base='/tmp/artifacts'
+2018-06-18 15:41:43,839 INFO o.a.j.s.SaveService: Testplan (JMX) version: 2.2. Testlog (JTL) version: 2.2
+2018-06-18 15:41:43,855 INFO o.a.j.s.SaveService: Using SaveService properties file encoding UTF-8
+2018-06-18 15:41:43,861 INFO o.a.j.s.SaveService: Using SaveService properties version 4.0
+2018-06-18 15:41:43,870 INFO o.a.j.s.SaveService: Loading file: /tmp/artifacts/modified_requests.jmx
+2018-06-18 15:41:43,938 INFO o.a.j.p.h.c.CacheManager: Will only cache the following methods: [GET]
+2018-06-18 15:41:43,941 INFO o.a.j.p.h.c.CookieManager: Settings: Delete null: true Check: true Allow variable: true Save: false Prefix: COOKIE_
+2018-06-18 15:41:43,963 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for text/html is org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser
+2018-06-18 15:41:43,963 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for application/xhtml+xml is org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser
+2018-06-18 15:41:43,963 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for application/xml is org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser
+2018-06-18 15:41:43,964 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for text/xml is org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser
+2018-06-18 15:41:43,964 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for text/vnd.wap.wml is org.apache.jmeter.protocol.http.parser.RegexpHTMLParser
+2018-06-18 15:41:43,965 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for text/css is org.apache.jmeter.protocol.http.parser.CssParser
+2018-06-18 15:41:43,993 INFO o.a.j.e.StandardJMeterEngine: Running the test!
+2018-06-18 15:41:43,994 INFO o.a.j.s.SampleEvent: List of sample_variables: []
+2018-06-18 15:41:43,995 INFO o.a.j.s.SampleEvent: List of sample_variables: []
+2018-06-18 15:41:44,000 INFO o.a.j.e.u.CompoundVariable: Note: Function class names must contain the string: '.functions.'
+2018-06-18 15:41:44,000 INFO o.a.j.e.u.CompoundVariable: Note: Function class names must not contain the string: '.gui.'
+2018-06-18 15:41:44,572 INFO o.a.j.JMeter: Running test (1529336504572)
+2018-06-18 15:41:44,629 INFO o.a.j.e.StandardJMeterEngine: Starting ThreadGroup: 1 : quick-test
+2018-06-18 15:41:44,629 INFO o.a.j.e.StandardJMeterEngine: Starting 1 threads for group quick-test.
+2018-06-18 15:41:44,630 INFO o.a.j.e.StandardJMeterEngine: Thread will continue on error
+2018-06-18 15:41:44,637 INFO o.a.j.e.StandardJMeterEngine: All thread groups have been started
+2018-06-18 15:41:44,637 INFO c.b.j.t.c.ConcurrencyThreadStarter: Start supplying threads
+2018-06-18 15:41:59,648 INFO o.a.j.s.SampleResult: Note: Sample TimeStamps are START times
+2018-06-18 15:41:59,649 INFO o.a.j.s.SampleResult: sampleresult.default.encoding is set to UTF-8
+2018-06-18 15:41:59,649 INFO o.a.j.s.SampleResult: sampleresult.useNanoTime=true
+2018-06-18 15:41:59,650 INFO o.a.j.s.SampleResult: sampleresult.nanoThreadSleep=5000
+2018-06-18 15:41:59,648 INFO o.a.j.t.JMeterThread: Thread started: quick-test 1-1
+2018-06-18 15:41:59,699 INFO o.a.j.p.h.s.HTTPHCAbstractImpl: Local host = 3729a5d54cbd
+2018-06-18 15:41:59,713 INFO o.a.j.p.h.s.HTTPHC4Impl: HTTP request retry count = 0
+2018-06-18 15:42:00,023 INFO o.a.j.p.h.p.BaseParser: Created org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser
+2018-06-18 15:42:00,100 INFO o.a.j.p.h.s.ResourcesDownloader: Creating ResourcesDownloader with keepalive_inseconds : 60
+2018-06-18 15:42:00,308 INFO o.a.j.p.h.p.BaseParser: Created org.apache.jmeter.protocol.http.parser.CssParser
+2018-06-18 15:42:00,309 INFO o.a.j.p.h.p.BaseParser: Created org.apache.jmeter.protocol.http.parser.CssParser
+2018-06-18 15:42:44,723 INFO c.b.j.t.c.ConcurrencyThreadStarter: Done supplying threads
+2018-06-18 15:42:44,779 INFO o.a.j.t.JMeterThread: Thread is done: quick-test 1-1
+2018-06-18 15:42:44,779 INFO o.a.j.t.JMeterThread: Thread finished: quick-test 1-1
+2018-06-18 15:42:44,781 INFO o.a.j.e.StandardJMeterEngine: Notifying test listeners of end of test
+2018-06-18 15:42:44,787 INFO o.a.j.e.StandardJMeterEngine: Forced JVM shutdown requested at end of test
