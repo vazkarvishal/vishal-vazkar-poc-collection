@@ -1,18 +1,18 @@
 from chalice import Chalice
 import requests
 
-app = Chalice(app_name='chalice-sns-demo')
+app = Chalice(app_name='chalice-sns-demo', debug=True)
 
 
 @app.route('/')
 def index():
     return {'hello': 'world'}
 
-@app.on_sns_message(topic='chaliceDemoTopic')
+@app.on_sns_message(topic='MyDemoTopic')
 def handle_sns_message(event):
-    app.log.debug("Received message with subject: %s, message: %s",
-                    event.subject, event.message)
-    # response = requests.post('your_slac_hook', data='{"text":"Hello, World!"}')
+    app.log.debug("Received message with subject: %s, message: %s", event.subject, event.message)
+    print("Hello world")
+    # response = requests.post('https://hooks.slack.com/services/APIKEY', data='{"website_status":"Hello, World!"}')
     # app.log.info(response)
     
 # The view function above will return {"hello": "world"}
