@@ -5,24 +5,24 @@ apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
 
 metadata:
-  name: "vv-fargate-poc-2"
+  name: "vv-fargate-poc"
   region: eu-west-2
 
 vpc:
   id: "vpc-7393c81b"
   subnets:
     public:
-      public-1-zone-a:
+      eu-west-2a:
           id: "subnet-06a8c17c"
-      public-2-zone-b:
+      eu-west-2b:
           id: "subnet-dfd86793"
-      public-3-zone-c:
+      eu-west-2c:
           id: "subnet-acc2efc5"
     private:
-      private-1-zone-a:
-          id: "subnet-0ee882bb208a1df1a"
-      private-1-zone-b:
-          id: "subnet-090f3c750223fc698"
+      eu-west-2a:
+          id: subnet-0ee882bb208a1df1a
+      eu-west-2b:
+          id: subnet-090f3c750223fc698
 fargateProfiles:
   - name: fp-default
     selectors:
@@ -33,8 +33,8 @@ fargateProfiles:
       # scheduled onto Fargate:
       - namespace: kube-system
     subnets: 
-      - private-1-zone-a
-      - private-1-zone-b
+      - subnet-0ee882bb208a1df1a
+      - subnet-090f3c750223fc698
   - name: fp-dev
     selectors:
       # All workloads in the "dev" Kubernetes namespace matching the following
@@ -44,5 +44,5 @@ fargateProfiles:
           env: dev
           checks: passed
     subnets: 
-      - private-1-zone-a
-      - private-1-zone-b
+      - subnet-0ee882bb208a1df1a
+      - subnet-090f3c750223fc698
