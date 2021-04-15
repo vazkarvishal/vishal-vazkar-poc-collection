@@ -1,0 +1,181 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Creates an S3 bucket configured for hosting a static website, and a Route
+  53 DNS record pointing to the bucket
+Parameters:
+  DomainName:
+    Type: String
+    Description: The DNS name of an existing Amazon Route 53 hosted zone e.g. dev.vishalvazkar.com
+    AllowedPattern: (?!-)[a-zA-Z0-9-.]{1,63}(?<!-)
+    ConstraintDescription: must be a valid DNS zone name.
+    Default: dev.vishalvazkar.com
+
+  SubDomainName:
+    Type: String
+    Description: The sub-domain name to prefix the Domain Name with.
+    Default: html-convert
+
+  LoggingBucketName:
+    Type: String
+    Description: Name of the bucket to use for server access logging.
+    Default: access-logs-bucket-name
+
+  HostedZoneID:
+    Type: String
+    Description: Route 53 hosted zone ID of docs for docs.vodafoneaws.co.uk
+
+  ACMCertificateArn:
+    Type: String
+    Description: ARN of the docs wildcard cert in us-east-1 
+
+  s3DnsZoneId:
+    Type: String
+    Description: The zone_id within alias is the S3 bucket zone ID, not the Route 53 zone ID. Default ID is what s3 has fixed.
+    Default: Z2FDTNDATAQYW2
+
+  Team:
+    Type: String
+    Description: Team the poject belongs to.
+    Default: Systems
+
+  Division:
+    Type: String
+    Description: Division the poject belongs to.
+    Default: undefined
+
+  Program:
+    Type: String
+    Description: Program the poject belongs to.
+    Default: undefined
+
+  Domain:
+    Type: String
+    Description: Environment the poject belongs to.
+    Default: vv
+    
+Resources:
+
+  WebsiteBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub ${SubDomainName}.${DomainName}
+      WebsiteConfiguration:
+        IndexDocument: index.html
+      LoggingConfiguration:
+        DestinationBucketName: !Ref LoggingBucketName
+        LogFilePrefix: !Ref SubDomainName
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          -
+            ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      Tags:
+        - Key: Name
+          Value: !Sub "${Domain}-${SubDomainName}"
+        - Key: Domain
+          Value: !Ref Domain
+        - Key: Division
+          Value: !Ref 'Division'
+        - Key: Program
+          Value: !Ref 'Program'
+        - Key: Team
+          Value: !Ref Team
+  WebsiteBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref 'WebsiteBucket'
+      PolicyDocument:
+        Statement:
+        - Effect: Allow
+          Principal:
+            CanonicalUser: !GetAtt 'CloudFrontOriginAccessIdentity.S3CanonicalUserId'
+          Action: s3:GetObject
+          Resource: 
+            - !Sub arn:aws:s3:::${WebsiteBucket}/*
+            - !Sub arn:aws:s3:::${WebsiteBucket}
+        - Effect: Deny
+          Principal: '*'
+          Action: '*'
+          Resource: 
+            - !Sub arn:aws:s3:::${WebsiteBucket}/*
+            - !Sub arn:aws:s3:::${WebsiteBucket}
+          Condition:
+            Bool:
+              aws:SecureTransport: false
+  IPSet:
+    Type: "AWS::WAF::IPSet"
+    Properties:
+      IPSetDescriptors:
+        - Type: IPV4
+          Value: "0.0.0.0/0"
+      Name: !Sub ${AWS::StackName}-waf-ipset
+  IPRestrictRule:
+    Type: "AWS::WAF::Rule"
+    Properties:
+      MetricName: webcampaigniprule
+      Name: !Sub ${AWS::StackName}-waf-rule
+      Predicates:
+        - Type: IPMatch
+          Negated: false
+          DataId: !Ref IPSet
+  WAFAcl:
+    Type: "AWS::WAF::WebACL"
+    Properties:
+      Name: !Sub ${AWS::StackName}-waf
+      DefaultAction:
+        Type: "BLOCK"
+      MetricName: webcampaignwafacl
+      Rules:
+        -
+          Action:
+            Type: "ALLOW"
+          Priority: 1
+          RuleId:
+            Ref: "IPRestrictRule"
+  CloudFrontOriginAccessIdentity:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: "S3Origin"
+  WebsiteCloudfront:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        WebACLId:
+          Ref: "WAFAcl"
+        Comment: Cloudfront Distribution pointing to S3 bucket
+        Origins:
+        - DomainName: !GetAtt WebsiteBucket.DomainName
+          Id: S3Origin
+          S3OriginConfig:
+            OriginAccessIdentity: !Sub origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}
+        Enabled: true
+        HttpVersion: 'http2'
+        DefaultRootObject: index.html
+        Aliases:
+        - !Sub ${SubDomainName}.${DomainName}
+        DefaultCacheBehavior:
+          AllowedMethods:
+          - GET
+          - HEAD
+          Compress: true
+          TargetOriginId: S3Origin
+          ForwardedValues:
+            QueryString: false
+            Cookies:
+              Forward: all
+          ViewerProtocolPolicy: redirect-to-https
+        PriceClass: PriceClass_All
+        ViewerCertificate:
+          AcmCertificateArn: !Ref ACMCertificateArn
+          SslSupportMethod: sni-only
+          MinimumProtocolVersion: TLSv1.2_2018
+  WebsiteDNSName:
+    Type: AWS::Route53::RecordSetGroup
+    Properties:
+      HostedZoneName: !Sub ${DomainName}.
+      RecordSets:
+      - Name: !Sub ${SubDomainName}.${DomainName}
+        Type: A
+        AliasTarget:
+          HostedZoneId: !Ref s3DnsZoneId
+          DNSName: !GetAtt [WebsiteCloudfront, DomainName]
