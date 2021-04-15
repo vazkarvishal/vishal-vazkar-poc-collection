@@ -19,10 +19,6 @@ Parameters:
     Description: Name of the bucket to use for server access logging.
     Default: access-logs-bucket-name
 
-  HostedZoneID:
-    Type: String
-    Description: Route 53 hosted zone ID of docs for docs.vodafoneaws.co.uk
-
   ACMCertificateArn:
     Type: String
     Description: ARN of the docs wildcard cert in us-east-1 
