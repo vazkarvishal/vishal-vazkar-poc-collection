@@ -7,3 +7,4 @@ EKS with Fargate only works on private subnets. You need to make sure your priva
 - [EKS General Commands](https://docs.aws.amazon.com/eks/latest/userguide/getting-started-eksctl.html)
 - [Kubernetes Ingress](https://docs.aws.amazon.com/eks/latest/userguide/alb-ingress.html) - Uses ALB in the background.
 - [EKS Cluster Management Resources](https://docs.aws.amazon.com/eks/latest/userguide/eks-managing.html)
+- [AWS How to install ingress controller for fargate](https://aws.amazon.com/premiumsupport/knowledge-center/eks-alb-ingress-controller-fargate/)
