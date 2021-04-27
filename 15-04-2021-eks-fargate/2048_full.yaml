@@ -1,19 +1,14 @@
 ---
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: game-2048
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: game-2048
+  namespace: default
   name: deployment-2048
 spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: app-2048
-  replicas: 5
+  replicas: 1
   template:
     metadata:
       labels:
@@ -29,7 +24,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  namespace: game-2048
+  namespace: default
   name: service-2048
 spec:
   ports:
@@ -43,8 +38,8 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  namespace: game-2048
-  name: ingress-2048
+  namespace: default
+  name: nginx-2048
   annotations:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internet-facing
