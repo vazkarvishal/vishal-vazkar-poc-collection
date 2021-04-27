@@ -1,0 +1,26 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  IAM role for serviceaccount "kube-system/aws-load-balancer-controller"
+  [created and managed by eksctl]
+Resources:
+  Role1:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action:
+              - 'sts:AssumeRoleWithWebIdentity'
+            Condition:
+              StringEquals:
+                'oidc.eks.eu-west-2.amazonaws.com/id/828D823811E3539E7895E69A567114DA:aud': sts.amazonaws.com
+                'oidc.eks.eu-west-2.amazonaws.com/id/828D823811E3539E7895E69A567114DA:sub': 'system:serviceaccount:kube-system:aws-load-balancer-controller'
+            Effect: Allow
+            Principal:
+              Federated: >-
+                arn:aws:iam::140228208500:oidc-provider/oidc.eks.eu-west-2.amazonaws.com/id/828D823811E3539E7895E69A567114DA
+        Version: 2012-10-17
+      ManagedPolicyArns:
+        - 'arn:aws:iam::140228208500:policy/AWSLoadBalancerControllerIAMPolicy'
+Outputs:
+  Role1:
+    Value: !GetAtt Role1.Arn
