@@ -29,6 +29,21 @@ aws eks update-kubeconfig --name 'vf-eks-poc-10'
 7. Get OIDC policy for ALB and save
 `curl -o oidc_iam_policy.json https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.1.3/docs/install/iam_policy.json`
 
+7a. Associate OIDC provider with cluster
+```
+eksctl utils associate-iam-oidc-provider \
+    --region eu-west-2 \
+    --cluster vf-eks-poc-10 \
+    --approve
+```
+
+7b. Create IAM Policy
+```
+#Once per AWS Account - cannot create duplicate names
+aws iam create-policy \
+    --policy-name AWSLoadBalancerControllerIAMPolicy \
+    --policy-document file://iam-policy.json
+```
 8. Install target-group binding for AWS
 ```
 kubectl apply -k "github.com/aws/eks-charts/stable/aws-load-balancer-controller//crds?ref=master"
@@ -42,7 +57,7 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
     --set clusterName=vf-eks-poc-10 \
     --set serviceAccount.create=false \
     --set region=eu-west-2 \
-    --set vpcId=vpc-0ed468bf1704cf2c6 \
+    --set vpcId=vpc-060857c98507e4586 \
     --set serviceAccount.name=aws-load-balancer-controller \
     -n kube-system
 ```
