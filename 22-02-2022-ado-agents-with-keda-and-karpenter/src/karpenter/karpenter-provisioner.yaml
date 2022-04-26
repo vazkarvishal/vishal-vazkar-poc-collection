@@ -1,0 +1,23 @@
+apiVersion: karpenter.sh/v1alpha5
+kind: Provisioner
+metadata:
+  name: default
+  labels:
+    name: azdo-agents
+spec:
+  labels:
+    name: azdo-agents
+  requirements:
+    - key: karpenter.sh/capacity-type
+      operator: In
+      values: ["spot"]
+  limits:
+    resources:
+      cpu: 100
+  provider:
+    amiFamily: Bottlerocket
+    subnetSelector:
+      karpenter.sh/discovery: dot-net-notts
+    securityGroupSelector:
+      karpenter.sh/discovery: dot-net-notts
+  ttlSecondsAfterEmpty: 300

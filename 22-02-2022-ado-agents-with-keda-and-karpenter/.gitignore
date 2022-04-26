@@ -1,0 +1,8 @@
+src/infrastructure/.terraform
+*.lock.*
+src/infrastructure/terraform.tfstate
+src/infrastructure/terraform.tfstate.backup
+src/infrastructure/variables.auto.tfvars
+*.tfstate
+src/infrastructure-backup/.terraform
+src/infrastructure-backup/terraform.tfstate*
