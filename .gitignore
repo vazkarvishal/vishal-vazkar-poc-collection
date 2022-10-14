@@ -1,3 +1,7 @@
 .DS_Store
 24-01-2021-aws-chalice/sns-with-lamba/runtime/__pycache__
 24-01-2021-aws-chalice/chalice-sns-demo/__pycache__
+09-07-2022-multi-network-eks-karpenter/.terraform
+*.hcl
+*.tfstate*
+09-07-2022-multi-network-eks-karpenter/aws-node-daemonset.yaml
