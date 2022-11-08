@@ -5,3 +5,4 @@
 *.hcl
 *.tfstate*
 09-07-2022-multi-network-eks-karpenter/aws-node-daemonset.yaml
+28-10-2022-transit-gateways/.terraform
