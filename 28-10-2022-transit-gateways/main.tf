@@ -49,10 +49,10 @@ module "vpc_3" {
   enable_dns_support   = true
   azs                  = ["eu-west-1a", "eu-west-1b", "eu-west-1c"]
   private_subnets      = ["10.2.1.0/24", "10.2.2.0/24", "10.2.3.0/24"]
-  public_subnets       = ["10.2.101.0/24", "10.2.102.0/24", "10.2.103.0/24"]
+  # public_subnets       = ["10.2.101.0/24", "10.2.102.0/24", "10.2.103.0/24"]
 
-  enable_nat_gateway = true
-  single_nat_gateway = true
+  enable_nat_gateway = false
+  # single_nat_gateway = true
   enable_vpn_gateway = true
 
   tags = {
@@ -139,16 +139,16 @@ resource "aws_ec2_transit_gateway_route" "internet_route" {
   transit_gateway_route_table_id = aws_ec2_transit_gateway.example.association_default_route_table_id
 }
 
-# resource "aws_route" "vpc_3_to_tgw_for_igw" {
-#   count = length(module.vpc_3.private_route_table_ids)
-#   # not using for each due to dependency loop and for each failing due to not knowing number of items before apply
-#   # for_each = {
-#   #   for route_table_id in module.vpc_3.private_route_table_ids : route_table_id => route_table_id
-#   # }
-#   route_table_id         = module.vpc_3.private_route_table_ids[count.index]
-#   destination_cidr_block = "0.0.0.0/0"
-#   transit_gateway_id     = aws_ec2_transit_gateway.example.id
-# }
+resource "aws_route" "vpc_3_to_tgw_for_igw" {
+  count = length(module.vpc_3.private_route_table_ids)
+  # not using for each due to dependency loop and for each failing due to not knowing number of items before apply
+  # for_each = {
+  #   for route_table_id in module.vpc_3.private_route_table_ids : route_table_id => route_table_id
+  # }
+  route_table_id         = module.vpc_3.private_route_table_ids[count.index]
+  destination_cidr_block = "0.0.0.0/0"
+  transit_gateway_id     = aws_ec2_transit_gateway.example.id
+}
 
 
 # resource "aws_route53_zone" "private" {
