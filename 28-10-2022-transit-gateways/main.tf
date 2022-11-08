@@ -131,13 +131,32 @@ resource "aws_route" "vpc_3_to_tgw" {
   transit_gateway_id     = aws_ec2_transit_gateway.example.id
 }
 
-# Route out to the internet from VPC 3 to VPC 1 as VPC 1 has IGW
 
-resource "aws_ec2_transit_gateway_route" "internet_route" {
+resource "aws_route" "vpc1_public_subnets_to_tgw" {
+  count = length(module.vpc.public_route_table_ids)
+  # not using for each due to dependency loop and for each failing due to not knowing number of items before apply
+  # for_each = {
+  #   for route_table_id in module.vpc_3.private_route_table_ids : route_table_id => route_table_id
+  # }
+  route_table_id         = module.vpc.default_route_table_id
+  destination_cidr_block = "10.0.0.0/8"
+  transit_gateway_id     = aws_ec2_transit_gateway.example.id
+}
+
+# Blackhole  for avoiding NAT bounce back traffic
+# resource "aws_ec2_transit_gateway_route" "blackhole" {
+#   destination_cidr_block         = "10.0.0.0/8"
+#   transit_gateway_route_table_id = aws_ec2_transit_gateway.example.association_default_route_table_id
+#   blackhole                      = true
+# }
+
+# TGW to Attachment 1
+resource "aws_ec2_transit_gateway_route" "tgw_internet_vpc_1" {
   destination_cidr_block         = "0.0.0.0/0"
   transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.vpc_1.id
   transit_gateway_route_table_id = aws_ec2_transit_gateway.example.association_default_route_table_id
 }
+
 
 resource "aws_route" "vpc_3_to_tgw_for_igw" {
   count = length(module.vpc_3.private_route_table_ids)
@@ -150,70 +169,3 @@ resource "aws_route" "vpc_3_to_tgw_for_igw" {
   transit_gateway_id     = aws_ec2_transit_gateway.example.id
 }
 
-
-# resource "aws_route53_zone" "private" {
-#   name = "sqs.eu-west-1.amazonaws.com"
-
-#   vpc {
-#     vpc_id = module.vpc_3.vpc_id
-#   }
-# }
-
-# ## ALB for VPC 1 
-# resource "aws_security_group" "alb_sg" {
-#   name        = "alb_sg_vpc_3"
-#   description = "alb_sg_vpc_3"
-#   vpc_id      = module.vpc_3.vpc_id
-
-#   ingress {
-#     description = "HTTP from VPC"
-#     from_port   = 80
-#     to_port     = 80
-#     protocol    = "tcp"
-#     cidr_blocks = ["0.0.0.0/0"] ##TODO:: To change to only allow VPC CIDR blocks
-#   }
-
-#   egress {
-#     from_port        = 0
-#     to_port          = 0
-#     protocol         = "-1"
-#     cidr_blocks      = ["0.0.0.0/0"]
-#     ipv6_cidr_blocks = ["::/0"]
-#   }
-
-#   tags = {
-#     Terraform   = "true"
-#     Environment = "dev"
-#     Name        = "tgw-demo-vpc-1"
-#   }
-# }
-
-# resource "aws_lb" "test" {
-#   name               = "tgw-demo-vpc-3"
-#   internal           = true
-#   load_balancer_type = "application"
-#   security_groups    = [aws_security_group.alb_sg.id]
-#   subnets            = module.vpc_3.private_subnets
-
-#   tags = {
-#     Terraform   = "true"
-#     Environment = "dev"
-#     Name        = "tgw-demo-vpc-3"
-#   }
-# }
-
-# resource "aws_lb_listener" "test_listener" {
-#   load_balancer_arn = aws_lb.test.arn
-#   port              = "80"
-#   protocol          = "HTTP"
-
-#   default_action {
-#     type = "fixed-response"
-
-#     fixed_response {
-#       content_type = "text/plain"
-#       message_body = "Transit Gateway Test WORKS!!"
-#       status_code  = "200"
-#     }
-#   }
-# }

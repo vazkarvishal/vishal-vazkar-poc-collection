@@ -38,6 +38,15 @@ resource "aws_vpc_endpoint" "vpc_1_interface_endpoint_ec2_messages" {
   subnet_ids          = module.vpc.private_subnets
 }
 
+resource "aws_vpc_endpoint" "vpc_1_interface_endpoint_logs" {
+  vpc_id              = module.vpc.vpc_id
+  service_name        = "com.amazonaws.eu-west-1.logs"
+  vpc_endpoint_type   = "Interface"
+  security_group_ids  = [aws_security_group.vpc_1_aws_interface_endpoints_sg.id]
+  private_dns_enabled = false
+  subnet_ids          = module.vpc.private_subnets
+}
+
 resource "aws_vpc_endpoint" "vpc_1_s3" {
   vpc_id       = module.vpc.vpc_id
   service_name = "com.amazonaws.eu-west-1.s3"
