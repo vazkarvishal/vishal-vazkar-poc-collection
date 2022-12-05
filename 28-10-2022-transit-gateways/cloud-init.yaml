@@ -1,0 +1,42 @@
+write_files:
+  - path: /etc/yum.conf
+    owner: root:root
+    permissions: '0644'
+    content: |
+      [main]
+      cachedir=/var/cache/yum/$basearch/$releasever
+      keepcache=0
+      debuglevel=2
+      logfile=/var/log/yum.log
+      exactarch=1
+      obsoletes=1
+      gpgcheck=1
+      plugins=1
+      installonly_limit=3
+      #distroverpkg=system-release
+      #timeout=5
+      #retries=7
+​
+      #  This is the default, if you make this bigger yum won't see if the metadata
+      # is newer on the remote and so you'll "gain" the bandwidth of not having to
+      # download the new metadata and "pay" for it by yum not having correct
+      # information.
+      #  It is esp. important, to have correct metadata, for distributions like
+      # Fedora which don't keep old packages around. If you don't like this checking
+      # interupting your command line usage, it's much better to have something
+      # manually check the metadata once an hour (yum-updatesd will do this).
+      # metadata_expire=90m
+​
+      # PUT YOUR REPOS HERE OR IN separate files named file.repo
+      # in /etc/yum.repos.d
+​
+groups:
+  - admins
+packages:
+  - aws-cli
+  - telnet
+  - jq
+package_update: true
+runcmd:
+  - yum update -y ecs-init
+  - sudo yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
