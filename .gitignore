@@ -5,3 +5,6 @@
 *.hcl
 *.tfstate*
 09-07-2022-multi-network-eks-karpenter/aws-node-daemonset.yaml
+07-11-2022-cloud-carbon-calculator/aws-carbon-calculator/.yarn
+07-11-2022-cloud-carbon-calculator/aws-carbon-calculator/node_modules
+.terraform

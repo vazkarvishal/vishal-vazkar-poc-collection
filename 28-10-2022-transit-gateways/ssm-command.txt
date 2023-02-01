@@ -1,0 +1,89 @@
+time aws ssm describe-parameters --region eu-west-1 --endpoint-url your-vpc-endpoint-url
+time aws ssm describe-parameters --region eu-west-1 --endpoint-url your-vpc-endpoint-url 
+time aws ssm describe-parameters --region eu-west-1 --endpoint-url your-vpc-endpoint-url
+time aws ssm describe-parameters --region eu-west-1 --endpoint-url your-vpc-endpoint-url
+time aws ssm describe-parameters --region eu-west-1 --endpoint-url your-vpc-endpoint-url
+
+
+time aws ssm describe-parameters --region eu-west-1 --endpoint-url your-vpc-endpoint-parameter
+
+
+time aws ssm put-parameter \
+    --name "test" \
+    --value "test" \
+    --type String \
+    --region eu-west-1 \
+    --endpoint-url your-vpc-endpoint-url 
+
+time aws ssm put-parameter \
+    --name "test1" \
+    --value "test" \
+    --type String \
+    --region eu-west-1 \
+    --endpoint-url your-vpc-endpoint-url
+
+time aws ssm put-parameter \
+    --name "test2" \
+    --value "test" \
+    --type String \
+    --region eu-west-1 \
+    --endpoint-url your-vpc-endpoint-url
+
+time aws ssm put-parameter \
+    --name "test3" \
+    --value "test" \
+    --type String \
+    --region eu-west-1 \
+    --endpoint-url your-vpc-endpoint-url
+
+time aws ssm put-parameter \
+    --name "test4" \
+    --value "test" \
+    --type String \
+    --region eu-west-1 \
+    --endpoint-url your-vpc-endpoint-url
+
+
+  
+  ####### VPC 3 ENDPOINTS
+
+time aws ssm describe-parameters --region eu-west-1 --endpoint-url your-vpc-endpoint-parameter
+time aws ssm describe-parameters --region eu-west-1 --endpoint-url your-vpc-endpoint-parameter
+time aws ssm describe-parameters --region eu-west-1 --endpoint-url your-vpc-endpoint-parameter
+time aws ssm describe-parameters --region eu-west-1 --endpoint-url your-vpc-endpoint-parameter
+time aws ssm describe-parameters --region eu-west-1 --endpoint-url your-vpc-endpoint-parameter
+
+time aws ssm put-parameter \
+    --name "test" \
+    --value "test" \
+    --type String \
+    --region eu-west-1 \
+    --endpoint-url your-vpc-endpoint-parameter
+
+time aws ssm put-parameter \
+    --name "test1" \
+    --value "test" \
+    --type String \
+    --region eu-west-1 \
+    --endpoint-url your-vpc-endpoint-parameter
+
+time aws ssm put-parameter \
+    --name "test2" \
+    --value "test" \
+    --type String \
+    --region eu-west-1 \
+    --endpoint-url your-vpc-endpoint-parameter
+
+time aws ssm put-parameter \
+    --name "test3" \
+    --value "test" \
+    --type String \
+    --region eu-west-1 \
+    --endpoint-url your-vpc-endpoint-parameter
+
+time aws ssm put-parameter \
+    --name "test4" \
+    --value "test" \
+    --type String \
+    --region eu-west-1 \
+    --endpoint-url your-vpc-endpoint-parameter
