@@ -1,0 +1,33 @@
+# apiVersion: gateway.networking.k8s.io/v1beta1
+# kind: Gateway
+# metadata:
+#   name: httpbin-gateway
+# spec:
+#   gatewayClassName: istio
+#   # selector:
+#   #   istio: internal-ingressgateway
+#   listeners:
+#   - name: http
+#     # hostname: "httpbin.example.com"
+#     port: 80
+#     hosts:
+#         - '*'
+#     protocol: HTTP
+#     # allowedRoutes:
+#     #   namespaces:
+#     #     from: Same
+
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: istio-ingressgateway
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - '*'

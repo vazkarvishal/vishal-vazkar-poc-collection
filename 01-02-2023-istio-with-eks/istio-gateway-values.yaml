@@ -1,0 +1,10 @@
+service:
+  # annotations: {
+  #   service.beta.kubernetes.io/aws-load-balancer-type: "alb",
+  #   service.beta.kubernetes.io/aws-load-balancer-internal: "false"
+  # }
+  type: NodePort
+  loadBalancerIP: ""
+  loadBalancerSourceRanges: []
+  externalTrafficPolicy: ""
+  externalIPs: []

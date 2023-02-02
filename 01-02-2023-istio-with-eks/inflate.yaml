@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inflate
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: inflate
+  template:
+    metadata:
+      labels:
+        app: inflate
+    spec:
+      terminationGracePeriodSeconds: 0
+      containers:
+        - name: inflate
+          # image: public.ecr.aws/eks-distro/kubernetes/pause:3.7
+          image: ubuntu
+          resources:
+            requests:
+              cpu: 1
+          command:
+            - sleep
+            - "3600000000"
