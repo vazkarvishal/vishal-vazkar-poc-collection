@@ -91,7 +91,7 @@ resource "kubectl_manifest" "karpenter_provisioner" {
         resources:
           cpu: 100
       providerRef:
-        name: default
+        name: bottlerocket
       ttlSecondsAfterEmpty: 30
   YAML
 
@@ -100,6 +100,44 @@ resource "kubectl_manifest" "karpenter_provisioner" {
   ]
 }
 
+resource "kubectl_manifest" "karpenter_node_template_bottle_rocket" {
+  yaml_body = <<-YAML
+    apiVersion: karpenter.k8s.aws/v1alpha1
+    kind: AWSNodeTemplate
+    metadata:
+      name: bottlerocket
+    spec:
+      amiFamily: Bottlerocket
+      subnetSelector:
+        karpenter.sh/discovery: "true"
+      securityGroupSelector:
+        karpenter.sh/discovery: ${module.eks.cluster_name}
+      tags:
+        karpenter.sh/discovery: ${module.eks.cluster_name}
+      userData:  |
+        # Enable kernel lockdown in "integrity" mode.
+        # This prevents modifications to the running kernel, even by privileged users.
+        [settings.kernel]
+        lockdown = "integrity"
+
+        # The admin host container provides SSH access and runs with "superpowers".
+        # It is disabled by default, but can be disabled explicitly.
+        [settings.host-containers.admin]
+        enabled = false
+
+        # The control host container provides out-of-band access via SSM.
+        # It is enabled by default, and can be disabled if you do not expect to use SSM.
+        # This could leave you with no way to access the API and change settings on an existing node!
+        [settings.host-containers.control]
+        enabled = false
+  YAML
+
+  depends_on = [
+    helm_release.karpenter
+  ]
+}
+
+# Backup node template - testing above template for bottlerocket
 resource "kubectl_manifest" "karpenter_node_template" {
   yaml_body = <<-YAML
     apiVersion: karpenter.k8s.aws/v1alpha1
