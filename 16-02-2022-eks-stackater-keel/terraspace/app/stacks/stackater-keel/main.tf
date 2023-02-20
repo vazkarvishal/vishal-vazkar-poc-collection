@@ -42,21 +42,9 @@ module "iam_assumable_role" {
   provider_url     = var.cluster_oidc_issuer_url
   role_policy_arns = [aws_iam_policy.keel_ecr_policy.arn]
   oidc_fully_qualified_subjects = [
-    "system:serviceaccount:${var.keel_namespace}:${local.service_account}",
     "system:serviceaccount:${var.keel_namespace}:default",
     "system:serviceaccount:${var.keel_namespace}:keel"
   ]
-}
-
-resource "kubernetes_service_account" "generated_sa" {
-  metadata {
-    name      = local.service_account
-    namespace = var.keel_namespace
-    annotations = {
-      "eks.amazonaws.com/role-arn" = module.iam_assumable_role.iam_role_arn
-    }
-  }
-  automount_service_account_token = true
 }
 
 resource "helm_release" "keel" {
