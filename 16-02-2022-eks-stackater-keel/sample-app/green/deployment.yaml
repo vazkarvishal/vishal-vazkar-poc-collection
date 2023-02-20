@@ -32,7 +32,7 @@ spec:
       containers:
         - name: vish-sample
           # image: public.ecr.aws/eks-distro/kubernetes/pause:3.7
-          image: 140228208500.dkr.ecr.ap-south-1.amazonaws.com/sample_app_ecr:latest
+          image: $AWS_ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com/sample_app_ecr:latest
           resources:
             requests:
               cpu: 1
