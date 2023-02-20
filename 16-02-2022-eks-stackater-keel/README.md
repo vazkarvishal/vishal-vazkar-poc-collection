@@ -1,9 +1,19 @@
+# What is this repo?
+
+I am Testing the use of tools like Stackater Reloader and Keel to debug and monitor how pods are gracefully re-started on config-map and ecr-image updates.
+
 ## Docker build commands
 ```
-# Build the app
+# Build the green app
+cd sample-app/green
 docker build -t vish-sample:green .
+
+# Build the red app
+cd sample-app/red
+docker build -t vish-sample:red .
+
 # Run the app locally
-docker run -it -d -p 8080:80 vish-sample:green
+docker run -it -d -p 8080:80 vish-sample:green # or red
 kubectl apply -f deployment.yaml
 kubectl delete -f deployment.yaml
 ```
