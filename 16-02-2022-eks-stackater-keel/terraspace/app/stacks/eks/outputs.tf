@@ -18,6 +18,11 @@ output "oidc_provider_arn" {
   value       = module.eks.oidc_provider_arn
 }
 
+output "cluster_oidc_issuer_url" {
+  description = "EKS Cluster cluster_oidc_issuer_url"
+  value       = module.eks.cluster_oidc_issuer_url
+}
+
 output "managed_node_group_role_arn" {
   description = "EKS Cluster Managed Node Group Role ARN"
   value       = module.eks.eks_managed_node_groups["initial"].iam_role_arn
