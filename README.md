@@ -1,4 +1,5 @@
-# Folder List
+# Motivation
+With our everyday jobs taking up most of our time, I am always curious to test tools and technologies which are being used in my industry. This is a repository with examples of all the tools I have had a play with. Take it with a pinch of salt, as most of them would be quick proof-of-concepts or JFDI's. 
 
 | Folder Name | Description |
 | ----------- | ----------- |
